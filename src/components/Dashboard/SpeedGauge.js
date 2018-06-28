@@ -3,7 +3,6 @@ import {StyleSheet} from 'react-native';
 import Svg, {Circle, Path, Text, TextPath} from 'react-native-svg';
 
 class SpeedGauge extends Component {
-
     getWhiteLine(size) {
         const strokeWidth = 8;
         const center = size / 2;
