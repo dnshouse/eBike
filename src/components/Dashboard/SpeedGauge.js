@@ -3,16 +3,15 @@ import {StyleSheet} from 'react-native';
 import Svg, {Circle, Path, Text, TextPath} from 'react-native-svg';
 
 class SpeedGauge extends Component {
-    getWhiteLine(size) {
+    getWhiteLine(center) {
         const strokeWidth = 8;
-        const center = size / 2;
         const radius = center - (strokeWidth / 2);
 
         return (
             <Circle fill="none"
                     stroke="#ffffff"
-                    cx={size / 2}
-                    cy={size / 2}
+                    cx={center}
+                    cy={center}
                     r={radius}
                     strokeWidth={strokeWidth}
                     strokeDasharray={((2 * Math.PI * (radius)) / 4 * 3)}
@@ -20,16 +19,15 @@ class SpeedGauge extends Component {
         );
     }
 
-    getGrayLine(size) {
+    getGrayLine(center) {
         const strokeWidth = 4;
-        const center = size / 2;
         const radius = center - (strokeWidth / 2) - 35;
 
         return (
             <Circle fill="none"
                     stroke="#777777"
-                    cx={size / 2}
-                    cy={size / 2}
+                    cx={center}
+                    cy={center}
                     r={radius}
                     strokeWidth={strokeWidth}
                     strokeDasharray={((2 * Math.PI * (radius)) / 4 * 3)}
@@ -37,17 +35,16 @@ class SpeedGauge extends Component {
         );
     }
 
-    getGrayInnerLine(size) {
+    getGrayInnerLine(center) {
         const strokeWidth = 15;
-        const center = size / 2;
         const radius = center - (strokeWidth / 2) - 39;
 
         return (
             <Circle fill="none"
                     stroke="#000000"
                     opacity="0.7"
-                    cx={size / 2}
-                    cy={size / 2}
+                    cx={center}
+                    cy={center}
                     r={radius}
                     strokeWidth={strokeWidth}
                     strokeDasharray={((2 * Math.PI * (radius)) / 4 * 3)}
@@ -55,11 +52,10 @@ class SpeedGauge extends Component {
         );
     }
 
-    getRedValueLine(size, percentLoad) {
+    getRedValueLine(center, percentLoad) {
         const load = 75 / 100 * percentLoad;
 
         const strokeWidth = 54;
-        const center = size / 2;
         const radius = center - (strokeWidth / 2);
 
         const circumference = (2 * Math.PI * radius);
@@ -68,8 +64,8 @@ class SpeedGauge extends Component {
         return (
             <Circle fill="none"
                     stroke="red"
-                    cx={size / 2}
-                    cy={size / 2}
+                    cx={center}
+                    cy={center}
                     r={radius}
                     strokeWidth={strokeWidth}
                     strokeDasharray={circumference}
@@ -78,25 +74,22 @@ class SpeedGauge extends Component {
         );
     }
 
-    getWhiteLineTextPath(size) {
-        const center = (size / 2);
+    getWhiteLineTextPath(center) {
         const transform = "translate(" + center + "," + center + ")";
-
-        const radius = (size / 2) - 14.7;
+        const radius = center - 13.6;
         const path = "M " + radius + ",0 A " + radius + "," + radius + " 0 0 1 -" + radius + ",0 A " + radius + "," + radius + " 0 0 1 " + radius + ",0";
         return (
             <Path id="myTextPath" d={path} transform={transform} fill="none"/>
         );
     }
 
-    getWhiteLineText(size) {
-        const center = (size / 2);
+    getWhiteLineText(center) {
         const transform = "translate(" + center + "," + center + ")";
 
         let i;
         let text = "";
-        for (i = 1; i <= 20; i++) {
-            text += "|            ";
+        for (i = 1; i <= 22; i++) {
+            text += "|         ";
         }
 
         return (
@@ -106,41 +99,32 @@ class SpeedGauge extends Component {
         );
     }
 
-    getMphValue(size, mph) {
-        const center = (size / 2);
-        const transform = "rotate(-135 " + center + " " + center + ") translate(" + center + "," + (center - 20) + ")";
-
+    getMphValue(center, mph) {
+        const transform = "rotate(-135 " + center + " " + center + ") translate(" + center + "," + (center - 15) + ")";
         return (
-            <Text fontSize="70" fill="red" fontWeight="bold" transform={transform}
-                  textAnchor="middle">{mph.toFixed(1)}</Text>
+            <Text fontSize="60" fill="red" fontWeight="bold" transform={transform} textAnchor="middle">{mph.toFixed(1)}</Text>
         );
     }
 
-    getMphLabel(size) {
-        const center = (size / 2);
+    getMphLabel(center) {
         const transform = "rotate(-135 " + center + " " + center + ") translate(" + center + "," + (center + 10) + ")";
-
         return (
-            <Text fontSize="20" fill="white" transform={transform} textAnchor="middle">MPH</Text>
+            <Text fontSize="18" fill="white" transform={transform} textAnchor="middle">MPH</Text>
         );
     }
 
-    getKmhValue(size, mph) {
-        const center = (size / 2);
-        const transform = "rotate(-135 " + center + " " + center + ") translate(" + center + "," + (center + 70) + ")";
+    getKmhValue(center, mph) {
+        const transform = "rotate(-135 " + center + " " + center + ") translate(" + center + "," + (center + 55) + ")";
         const kmh = mph * 1.609344;
-
         return (
-            <Text fontSize="45" fill="red" transform={transform} textAnchor="middle">{kmh.toFixed(1)}</Text>
+            <Text fontSize="30" fill="red" transform={transform} textAnchor="middle">{kmh.toFixed(1)}</Text>
         );
     }
 
-    getKmhLabel(size) {
-        const center = (size / 2);
-        const transform = "rotate(-135 " + center + " " + center + ") translate(" + center + "," + (center + 90) + ")";
-
+    getKmhLabel(center) {
+        const transform = "rotate(-135 " + center + " " + center + ") translate(" + center + "," + (center + 70) + ")";
         return (
-            <Text fontSize="15" fill="white" transform={transform} textAnchor="middle">km/h</Text>
+            <Text fontSize="13" fill="white" transform={transform} textAnchor="middle">km/h</Text>
         );
     }
 
@@ -148,25 +132,26 @@ class SpeedGauge extends Component {
         const {mph, maxMph} = this.props;
         const percentLoad = mph / maxMph * 100;
 
-        const size = 350;
+        const size = 300;
+        const center = (size / 2);
         const viewBox = "0 0 " + size + " " + size;
 
         return (
             <Svg width={size} height={size} viewBox={viewBox} style={styles.speedGauge}>
-                {this.getRedValueLine(size, percentLoad)}
+                {this.getRedValueLine(center, percentLoad)}
 
-                {this.getWhiteLine(size)}
-                {this.getWhiteLineTextPath(size)}
-                {this.getWhiteLineText(size)}
+                {this.getWhiteLine(center)}
+                {this.getWhiteLineTextPath(center)}
+                {this.getWhiteLineText(center)}
 
-                {this.getGrayLine(size)}
-                {this.getGrayInnerLine(size)}
+                {this.getGrayLine(center)}
+                {this.getGrayInnerLine(center)}
 
-                {this.getMphValue(size, mph)}
-                {this.getMphLabel(size)}
+                {this.getMphValue(center, mph)}
+                {this.getMphLabel(center)}
 
-                {this.getKmhValue(size, mph)}
-                {this.getKmhLabel(size)}
+                {this.getKmhValue(center, mph)}
+                {this.getKmhLabel(center)}
             </Svg>
         );
     }
