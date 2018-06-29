@@ -1,8 +1,35 @@
 import React, {Component} from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import Svg, {Circle, Path, Text, TextPath} from 'react-native-svg';
 
 class SpeedGauge extends Component {
+
+    getGraySpacer() {
+        const size = 365;
+        const strokeWidth = 4;
+        const center = size / 2;
+        const radius = center - (strokeWidth / 2);
+
+        const viewBox = "0 0 " + size + " " + size;
+
+        const circumference = (2 * Math.PI * radius);
+        const dashOffset = circumference * (1 - (15 / 100));
+
+        return (
+            <Svg width={size} height={size} viewBox={viewBox}>
+                <Circle fill="none"
+                        stroke="#777777"
+                        cx={size / 2}
+                        cy={size / 2}
+                        r={radius}
+                        strokeWidth={strokeWidth}
+                        strokeDasharray={circumference}
+                        strokeDashoffset={dashOffset}
+                />
+            </Svg>
+        );
+    }
+
     getWhiteLine(center) {
         const strokeWidth = 8;
         const radius = center - (strokeWidth / 2);
@@ -137,30 +164,55 @@ class SpeedGauge extends Component {
         const viewBox = "0 0 " + size + " " + size;
 
         return (
-            <Svg width={size} height={size} viewBox={viewBox} style={styles.speedGauge}>
-                {this.getRedValueLine(center, percentLoad)}
+            <View style={{position: 'absolute'}}>
+                <View style={styles.speedGauge}>
+                    <View style={styles.leftSpacer}>{this.getGraySpacer()}</View>
+                    <View style={styles.rightSpacer}>{this.getGraySpacer()}</View>
 
-                {this.getWhiteLine(center)}
-                {this.getWhiteLineTextPath(center)}
-                {this.getWhiteLineText(center)}
+                    <Svg width={size} height={size} viewBox={viewBox} style={styles.speedGaugeSvg}>
+                        {this.getRedValueLine(center, percentLoad)}
 
-                {this.getGrayLine(center)}
-                {this.getGrayInnerLine(center)}
+                        {this.getWhiteLine(center)}
+                        {this.getWhiteLineTextPath(center)}
+                        {this.getWhiteLineText(center)}
 
-                {this.getMphValue(center, mph)}
-                {this.getMphLabel(center)}
+                        {this.getGrayLine(center)}
+                        {this.getGrayInnerLine(center)}
 
-                {this.getKmhValue(center, mph)}
-                {this.getKmhLabel(center)}
-            </Svg>
+                        {this.getMphValue(center, mph)}
+                        {this.getMphLabel(center)}
+
+                        {this.getKmhValue(center, mph)}
+                        {this.getKmhLabel(center)}
+                    </Svg>
+                </View>
+            </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
     speedGauge: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    speedGaugeSvg: {
         transform: [
             {rotate: '135deg'}
+        ]
+    },
+    leftSpacer: {
+        position: 'absolute',
+        transform: [
+            {rotate: '155deg'}
+        ]
+    },
+    rightSpacer: {
+        position: 'absolute',
+        transform: [
+            {rotate: '330deg'}
         ]
     }
 });
