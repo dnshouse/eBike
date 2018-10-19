@@ -164,28 +164,26 @@ class SpeedGauge extends Component {
         const viewBox = "0 0 " + size + " " + size;
 
         return (
-            <View style={{position: 'absolute'}}>
-                <View style={styles.speedGauge}>
-                    <View style={styles.leftSpacer}>{this.getGraySpacer()}</View>
-                    <View style={styles.rightSpacer}>{this.getGraySpacer()}</View>
+            <View style={styles.speedGauge}>
+                <View style={styles.leftSpacer}>{this.getGraySpacer()}</View>
+                <View style={styles.rightSpacer}>{this.getGraySpacer()}</View>
 
-                    <Svg width={size} height={size} viewBox={viewBox} style={styles.speedGaugeSvg}>
-                        {this.getRedValueLine(center, percentLoad)}
+                <Svg width={size} height={size} viewBox={viewBox} style={styles.speedGaugeSvg}>
+                    {this.getRedValueLine(center, percentLoad)}
 
-                        {this.getWhiteLine(center)}
-                        {this.getWhiteLineTextPath(center)}
-                        {this.getWhiteLineText(center)}
+                    {this.getWhiteLine(center)}
+                    {this.getWhiteLineTextPath(center)}
+                    {this.getWhiteLineText(center)}
 
-                        {this.getGrayLine(center)}
-                        {this.getGrayInnerLine(center)}
+                    {this.getGrayLine(center)}
+                    {this.getGrayInnerLine(center)}
 
-                        {this.getMphValue(center, mph)}
-                        {this.getMphLabel(center)}
+                    {this.getMphValue(center, mph)}
+                    {this.getMphLabel(center)}
 
-                        {this.getKmhValue(center, mph)}
-                        {this.getKmhLabel(center)}
-                    </Svg>
-                </View>
+                    {this.getKmhValue(center, mph)}
+                    {this.getKmhLabel(center)}
+                </Svg>
             </View>
         );
     }

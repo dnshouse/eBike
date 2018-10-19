@@ -39,6 +39,7 @@
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		F618C76A786F4B41A036D6DC /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AA5068017C7E4EEDAB99D4B0 /* libRNSVG.a */; };
 		E6396B429F504AAB9813AE49 /* libRNSVG-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FE736044389B424D843EACEA /* libRNSVG-tvOS.a */; };
+		CDDF8E1C986047ECB00D30BB /* libRCTBluetoothSerial.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74911066914141B98C366E3B /* libRCTBluetoothSerial.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -347,6 +348,8 @@
 		BD1AFD600EAA48379C3CAFB5 /* RNSVG.xcodeproj */ = {isa = PBXFileReference; name = "RNSVG.xcodeproj"; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		AA5068017C7E4EEDAB99D4B0 /* libRNSVG.a */ = {isa = PBXFileReference; name = "libRNSVG.a"; path = "libRNSVG.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		FE736044389B424D843EACEA /* libRNSVG-tvOS.a */ = {isa = PBXFileReference; name = "libRNSVG-tvOS.a"; path = "libRNSVG-tvOS.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		E8D0A3E19CCE45A1839C908D /* RCTBluetoothSerial.xcodeproj */ = {isa = PBXFileReference; name = "RCTBluetoothSerial.xcodeproj"; path = "../node_modules/react-native-bluetooth-serial/ios/RCTBluetoothSerial.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		74911066914141B98C366E3B /* libRCTBluetoothSerial.a */ = {isa = PBXFileReference; name = "libRCTBluetoothSerial.a"; path = "libRCTBluetoothSerial.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -376,6 +379,7 @@
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				F618C76A786F4B41A036D6DC /* libRNSVG.a in Frameworks */,
+				CDDF8E1C986047ECB00D30BB /* libRCTBluetoothSerial.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -564,6 +568,7 @@
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				BD1AFD600EAA48379C3CAFB5 /* RNSVG.xcodeproj */,
+				E8D0A3E19CCE45A1839C908D /* RCTBluetoothSerial.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1192,10 +1197,12 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-bluetooth-serial/ios/RCTBluetoothSerial",
 				);
 			};
 			name = Debug;
@@ -1218,10 +1225,12 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-bluetooth-serial/ios/RCTBluetoothSerial",
 				);
 			};
 			name = Release;
@@ -1244,6 +1253,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-bluetooth-serial/ios/RCTBluetoothSerial",
 				);
 			};
 			name = Debug;
@@ -1265,6 +1275,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-bluetooth-serial/ios/RCTBluetoothSerial",
 				);
 			};
 			name = Release;
@@ -1296,10 +1307,12 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-bluetooth-serial/ios/RCTBluetoothSerial",
 				);
 			};
 			name = Debug;
@@ -1331,10 +1344,12 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-bluetooth-serial/ios/RCTBluetoothSerial",
 				);
 			};
 			name = Release;
@@ -1365,10 +1380,12 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-bluetooth-serial/ios/RCTBluetoothSerial",
 				);
 			};
 			name = Debug;
@@ -1399,10 +1416,12 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-svg/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-bluetooth-serial/ios/RCTBluetoothSerial",
 				);
 			};
 			name = Release;

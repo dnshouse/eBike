@@ -3,8 +3,7 @@ import {View} from 'react-native';
 
 import Dashboard from './src/components/Dashboard';
 
-type
-Props = {};
+type Props = {};
 export default class App extends Component<Props> {
     render() {
         return (

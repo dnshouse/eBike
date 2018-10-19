@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import Svg, {Path, Rect} from 'react-native-svg';
 
 class BatteryGauge extends Component {
@@ -21,10 +21,19 @@ class BatteryGauge extends Component {
                     <Path fill="white"
                           d="M351.309,34.133H160.691C142.66,34.133,128,48.802,128,66.825v412.484C128,497.331,142.677,512,160.691,512h190.618    C369.331,512,384,497.331,384,479.309V66.825C384,48.802,369.331,34.133,351.309,34.133z M366.925,479.309    c0,8.619-7.006,15.625-15.625,15.625H160.683c-8.619,0-15.625-7.006-15.625-15.625V66.825c0-8.619,7.014-15.625,15.625-15.625    H351.3c8.619,0,15.625,7.006,15.625,15.625V479.309z"/>
                 </Svg>
-                <Text style={{color:'white', textAlign:'center', fontSize:22, marginTop:5}}>{level}%</Text>
+                <Text style={styles.text}>{level}%</Text>
             </View>
         );
     }
 }
+
+const styles = StyleSheet.create ({
+    text: {
+        color:'white',
+        textAlign:'center',
+        fontSize:18,
+        marginTop:5
+    }
+});
 
 export default BatteryGauge;
