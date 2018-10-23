@@ -1,12 +1,6 @@
 import React, {Component} from 'react';
-import {
-    StyleSheet,
-    View,
-    Text,
-    TouchableOpacity,
-    Platform
-} from "react-native";
-import MapView, { Marker, AnimatedRegion } from "react-native-maps";
+import {Platform, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import MapView, {AnimatedRegion, Marker} from "react-native-maps";
 import haversine from "haversine";
 
 const LATITUDE = 51.509865;
@@ -47,8 +41,8 @@ class Map extends Component {
     componentDidMount() {
         this.watchID = navigator.geolocation.watchPosition(
             position => {
-                const { coordinate, routeCoordinates, distanceTravelled } = this.state;
-                const { latitude, longitude } = position.coords;
+                const {coordinate, routeCoordinates, distanceTravelled} = this.state;
+                const {latitude, longitude} = position.coords;
 
                 const newCoordinate = {
                     latitude,
@@ -76,7 +70,7 @@ class Map extends Component {
                 });
             },
             error => console.log(error),
-            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+            {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
         );
     }
 
@@ -85,7 +79,7 @@ class Map extends Component {
     }
 
     calcDistance = newLatLng => {
-        const { prevLatLng } = this.state;
+        const {prevLatLng} = this.state;
         return haversine(prevLatLng, newLatLng) || 0;
     };
 
@@ -96,10 +90,10 @@ class Map extends Component {
         longitudeDelta: LONGITUDE_DELTA
     });
 
-    getPolygon() {
-        if(this.state.routeCoordinates.length > 1) {
+    getPolyline() {
+        if (this.state.routeCoordinates.length > 1) {
             return (
-                <MapView.Polygon coordinates={this.state.routeCoordinates} strokeWidth={5}/>
+                <MapView.Polyline coordinates={this.state.routeCoordinates} strokeWidth={5}/>
             );
         }
     }
@@ -114,10 +108,12 @@ class Map extends Component {
                     loadingEnabled
                     region={this.getMapRegion()}
                 >
-                    {this.getPolygon()}
+                    {this.getPolyline()}
                     <Marker.Animated
-                        ref={marker => {this.marker = marker}}
-                        coordinate={this.state.coordinate} />
+                        ref={marker => {
+                            this.marker = marker
+                        }}
+                        coordinate={this.state.coordinate}/>
                 </MapView>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity style={[styles.bubble, styles.button]}>
@@ -135,7 +131,8 @@ const styles = StyleSheet.create({
     container: {
         ...StyleSheet.absoluteFillObject,
         justifyContent: "flex-end",
-        alignItems: "center"
+        alignItems: "center",
+        height: "90%"
     },
     map: {
         ...StyleSheet.absoluteFillObject
@@ -162,9 +159,7 @@ const styles = StyleSheet.create({
         marginVertical: 20,
         backgroundColor: "transparent"
     },
-    bottomBarContent: {
-
-    }
+    bottomBarContent: {}
 });
 
 export default Map;

@@ -1,4 +1,16 @@
-import { AppRegistry } from 'react-native';
+import React from 'react';
+import {AppRegistry} from 'react-native';
+import {Provider} from 'react-redux';
 import App from './App';
 
-AppRegistry.registerComponent('eBike', () => App);
+import configureStore from './src/store';
+
+const store = configureStore();
+
+const eBike = () => (
+    <Provider store={store}>
+        <App/>
+    </Provider>
+);
+
+AppRegistry.registerComponent('eBike', () => eBike);

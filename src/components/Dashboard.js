@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {AsyncStorage, StyleSheet, ToastAndroid, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import BackgroundTimer from 'react-native-background-timer';
-
+import {connect} from 'react-redux';
 import LeftSidebar from './Dashboard/LeftSidebar';
 import SpeedGauge from './Dashboard/SpeedGauge';
 import RightSidebar from './Dashboard/RightSidebar';
@@ -13,87 +13,40 @@ class Dashboard extends Component {
         super(props);
 
         this.state = {
-            isBluetoothEnabled: false,
-            isBluetoothConnected: false,
-            devices: [],
-            batteryLevel: 0,
-            speed: 0,
-            maxSpeed: 30,
             avgSpeed: 0,
             tripDistance: 0,
-            odoMiles: 0
+            odoMiles: 0,
+            maxSpeed: 30,
+            speed: 0,
+            batteryLevel: 0,
         };
 
         BackgroundTimer.setInterval(() => {
             this.getData();
-        }, 500);
+        }, 1000);
     }
 
-    componentWillMount() {
-        Promise.all([
-            BluetoothSerial.isEnabled(),
-            BluetoothSerial.list()
-        ]).then((values) => {
-            const [isBluetoothEnabled, devices] = values;
-            this.setState({isBluetoothEnabled, devices});
-            this.connect();
-        });
-
-        BluetoothSerial.on('bluetoothEnabled', () => {
-            Promise.all([
-                BluetoothSerial.isEnabled(),
-                BluetoothSerial.list()
-            ]).then((values) => {
-                const [isBluetoothEnabled, devices] = values;
-                this.setState({isBluetoothEnabled, devices});
-                this.connect();
-            });
-
-            BluetoothSerial.on('bluetoothDisabled', () => {
-                this.setState({isBluetoothEnabled: false, devices: []});
-            });
-
-            BluetoothSerial.on('error', (err) => console.log(`Error: ${err.message}`))
-        });
-    }
-
-    connect() {
-        AsyncStorage.getItem('connectedDeviceId', (error, result) => {
-            if (error) {
-                console.log(error);
-            }
-
-            if (result) {
-                BluetoothSerial.connect(result)
-                    .then((res) => {
-                        this.setState({isBluetoothConnected: true});
-                        ToastAndroid.show(`Connected to device ${result}`, ToastAndroid.SHORT);
-                    })
-                    .catch((err) => console.log((err.message)));
-            } else {
-                console.log('result is empty');
-            }
-        });
-    }
 
     getData() {
-        BluetoothSerial.write("status")
-            .then((res) => {
-                BluetoothSerial.readFromDevice().then((data) => {
-                    data = JSON.parse(data);
-                    if(data.status === "OK"){
-                        this.setState({
-                            batteryLevel: data.batteryLevel,
-                            speed: data.speed,
-                            avgSpeed: data.avgSpeed,
-                            tripDistance: data.tripDistance,
-                            odoMiles: data.odoMiles,
-                        });
-                        console.log(this.state);
-                    }
-                }).catch((err) => console.log(err.message));
-            })
-            .catch((err) => console.log(err.message));
+        if (this.props.isBluetoothConnected === true) {
+            BluetoothSerial.write("status")
+                .then((res) => {
+                    BluetoothSerial.readFromDevice().then((data) => {
+                        data = JSON.parse(data);
+                        if (data.status === "OK") {
+                            this.setState({
+                                avgSpeed: data.avgSpeed,
+                                tripDistance: data.tripDistance,
+                                odoMiles: data.odoMiles,
+                                speed: data.speed,
+                                batteryLevel: data.batteryLevel,
+                            });
+                            console.log(this.state);
+                        }
+                    }).catch((err) => console.log(err.message));
+                })
+                .catch((err) => console.log(err.message));
+        }
     }
 
     render() {
@@ -107,7 +60,7 @@ class Dashboard extends Component {
                     />
                 </View>
                 <View style={styles.main}>
-                    <SpeedGauge mph={this.state.speed} maxMph={this.state.maxSpeed}/>
+                    <SpeedGauge maxMph={this.state.maxSpeed} mph={this.state.speed}/>
                 </View>
                 <View style={styles.sideBar}>
                     <RightSidebar batteryLevel={this.state.batteryLevel}/>
@@ -132,4 +85,14 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Dashboard;
+const mapStateToProps = state => {
+    return {
+        isBluetoothConnected: state.bluetooth.isBluetoothConnected,
+    }
+};
+
+const mapDispatchToProps = dispatch => {
+    return {}
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

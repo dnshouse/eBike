@@ -1,77 +1,39 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Text, Switch, FlatList, TouchableOpacity, ToastAndroid, AsyncStorage} from 'react-native';
+import {AsyncStorage, FlatList, StyleSheet, Switch, Text, ToastAndroid, TouchableOpacity, View} from 'react-native';
 import BluetoothSerial from 'react-native-bluetooth-serial';
+import {connect} from 'react-redux';
+import {bluetoothConnected, bluetoothDisabled, bluetoothEnabled} from '../actions/bluetooth';
 
 class Settings extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            isBluetoothEnabled: false,
-            isBluetoothConnected: false,
-            devices: []
-        }
-    }
-
-    componentWillMount() {
-
-        Promise.all([
-            BluetoothSerial.isEnabled(),
-            BluetoothSerial.list()
-        ]).then((values) => {
-            const [isBluetoothEnabled, devices] = values;
-            this.setState({isBluetoothEnabled, devices});
-        });
-
-        BluetoothSerial.on('bluetoothEnabled', () => {
-
-            Promise.all([
-                BluetoothSerial.isEnabled(),
-                BluetoothSerial.list()
-            ]).then((values) => {
-                const [isBluetoothEnabled, devices] = values;
-                this.setState({isBluetoothEnabled, devices});
-            });
-
-            BluetoothSerial.on('bluetoothDisabled', () => {
-                this.setState({isBluetoothEnabled: false, devices: []});
-            });
-
-            BluetoothSerial.on('error', (err) => console.log(`Error: ${err.message}`))
-
-        });
-
-    }
-
     toggleBluetooth(value) {
         if (value === true) {
-            BluetoothSerial.enable()
-                .then((res) => this.setState({isBluetoothEnabled: true}))
-                .catch((err) => ToastAndroid.show(err.message, ToastAndroid.SHORT));
+            BluetoothSerial.enable().then((res) => {
+                this.props.bluetoothEnabled([]);
+            }).catch((err) => ToastAndroid.show(err.message, ToastAndroid.SHORT));
         } else {
-            BluetoothSerial.disable()
-                .then((res) => this.setState({isBluetoothEnabled: false}))
-                .catch((err) => ToastAndroid.show(err.message, ToastAndroid.SHORT));
+            BluetoothSerial.disable().then((res) => {
+                this.props.bluetoothDisabled();
+            }).catch((err) => ToastAndroid.show(err.message, ToastAndroid.SHORT));
         }
     }
 
-    connect(device) {
+    connectBluetooth(device) {
         BluetoothSerial.connect(device.id)
             .then((res) => {
                 AsyncStorage.setItem('connectedDeviceId', device.id, () => {
-                    this.setState({isBluetoothConnected: true});
-                    ToastAndroid.show(`Connected to device ${device.name} / ${device.id}`, ToastAndroid.SHORT);
+                    this.props.bluetoothConnected();
+                    ToastAndroid.show(`Connected to device ${device.name ? device.name : device.id}`, ToastAndroid.SHORT);
                 });
             })
             .catch((err) => console.log((err.message)))
     }
 
-    renderItem(item) {
+    renderBluetoothItem(item) {
         return (
-            <TouchableOpacity onPress={() => this.connect(item.item)}>
+            <TouchableOpacity onPress={() => this.connectBluetooth(item.item)}>
                 <View style={styles.deviceNameWrap}>
-                    <Text
-                        style={styles.deviceName}>{item.item.name ? item.item.name : item.item.id} / {item.item.id}</Text>
+                    <Text style={styles.deviceName}>{item.item.name ? item.item.name : item.item.id}</Text>
                 </View>
             </TouchableOpacity>
         );
@@ -80,24 +42,19 @@ class Settings extends Component {
     render() {
         return (
             <View style={styles.container}>
-
                 <View style={styles.toolbar}>
                     <Text style={styles.toolbarTitle}>Bluetooth Device List</Text>
-
                     <View style={styles.toolbarButton}>
-                        <Switch
-                            value={this.state.isBluetoothEnabled}
-                            onValueChange={(val) => this.toggleBluetooth(val)}
+                        <Switch value={this.props.isBluetoothEnabled}
+                                onValueChange={(val) => this.toggleBluetooth(val)}
                         />
                     </View>
-
                 </View>
-
                 <FlatList
                     style={{flex: 1}}
-                    data={this.state.devices}
+                    data={this.props.bluetoothDevices}
                     keyExtractor={item => item.id}
-                    renderItem={(item) => this.renderItem(item)}
+                    renderItem={(item) => this.renderBluetoothItem(item)}
                 />
             </View>
         );
@@ -142,4 +99,25 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Settings;
+const mapStateToProps = state => {
+    return {
+        bluetoothDevices: state.bluetooth.bluetoothDevices,
+        isBluetoothEnabled: state.bluetooth.isBluetoothEnabled,
+    }
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        bluetoothEnabled: () => {
+            dispatch(bluetoothEnabled())
+        },
+        bluetoothDisabled: () => {
+            dispatch(bluetoothDisabled())
+        },
+        bluetoothConnected: () => {
+            dispatch(bluetoothConnected())
+        },
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Settings);
