@@ -73,7 +73,6 @@ class App extends Component<Props> {
             <Swiper style={styles.wrapper} loop={false} showsButtons={false} showsPagination={false}>
                 <Dashboard/>
                 <Map/>
-                {/*<Location/>*/}
                 <Settings/>
             </Swiper>
         );
