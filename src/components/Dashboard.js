@@ -41,7 +41,7 @@ class Dashboard extends Component {
                                 speed: data.speed,
                                 batteryLevel: data.batteryLevel,
                             });
-                            console.log(this.state);
+                            // console.log(this.state);
                         }
                     }).catch((err) => console.log(err.message));
                 })
