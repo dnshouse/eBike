@@ -3,6 +3,7 @@ package com.ebike;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.corbt.keepawake.KCKeepAwakePackage;
 import com.github.yamill.orientation.OrientationPackage;
 import com.ocetnik.timer.BackgroundTimerPackage;
 import com.rusel.RCTBluetoothSerial.RCTBluetoothSerialPackage;
@@ -28,6 +29,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
+            new KCKeepAwakePackage(),
             new OrientationPackage(),
             new BackgroundTimerPackage(),
             new RCTBluetoothSerialPackage(),

@@ -3,17 +3,27 @@ import {AsyncStorage, StyleSheet, ToastAndroid} from 'react-native';
 import Swiper from 'react-native-swiper';
 import Orientation from 'react-native-orientation';
 import {connect} from 'react-redux';
+import BackgroundTimer from 'react-native-background-timer';
 import Dashboard from './src/components/Dashboard';
-import Map from './src/components/Map';
 import Settings from './src/components/Settings';
 import BluetoothSerial from "react-native-bluetooth-serial";
 import {bluetoothConnected, bluetoothDisabled, bluetoothEnabled} from './src/actions/bluetooth';
+import {locationUpdated} from "./src/actions/location";
 
 type Props = {};
 
 class App extends Component<Props> {
 
     componentWillMount() {
+
+        BackgroundTimer.setInterval(() => {
+            navigator.geolocation.getCurrentPosition(
+                position => this.props.locationUpdated(position),
+                error => console.log(error),
+                {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+            );
+        }, 1000);
+
         Promise.all([
             BluetoothSerial.isEnabled(),
             BluetoothSerial.list()
@@ -47,6 +57,20 @@ class App extends Component<Props> {
         });
     }
 
+    componentDidMount() {
+        Orientation.lockToLandscape();
+
+        this.watchID = navigator.geolocation.watchPosition(
+            position => this.props.locationUpdated(position),
+            error => console.log(error),
+            {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+        );
+    }
+
+    componentWillUnmount() {
+        navigator.geolocation.clearWatch(this.watchID);
+    }
+
     bluetoothConnect() {
         AsyncStorage.getItem('connectedDeviceId', (error, result) => {
             if (error) {
@@ -64,15 +88,11 @@ class App extends Component<Props> {
         });
     }
 
-    componentDidMount() {
-        Orientation.lockToLandscape();
-    }
-
     render() {
         return (
             <Swiper style={styles.wrapper} loop={false} showsButtons={false} showsPagination={false}>
                 <Dashboard/>
-                <Map/>
+                {/*<Map/>*/}
                 <Settings/>
             </Swiper>
         );
@@ -87,7 +107,9 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-    return {}
+    return {
+        location: state.location.currentLocation,
+    }
 };
 
 const mapDispatchToProps = dispatch => {
@@ -100,7 +122,10 @@ const mapDispatchToProps = dispatch => {
         },
         bluetoothConnected: () => {
             dispatch(bluetoothConnected())
-        }
+        },
+        locationUpdated: (locationData) => {
+            dispatch(locationUpdated(locationData))
+        },
     }
 };
 
