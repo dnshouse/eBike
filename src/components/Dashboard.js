@@ -1,11 +1,9 @@
 import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
-import BackgroundTimer from 'react-native-background-timer';
 import {connect} from 'react-redux';
 import LeftSidebar from './Dashboard/LeftSidebar';
 import SpeedGauge from './Dashboard/SpeedGauge';
 import RightSidebar from './Dashboard/RightSidebar';
-import BluetoothSerial from "react-native-bluetooth-serial";
 import KeepAwake from 'react-native-keep-awake';
 
 class Dashboard extends Component {
