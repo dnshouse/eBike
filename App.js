@@ -3,37 +3,37 @@ import {AsyncStorage, StyleSheet, ToastAndroid} from 'react-native';
 import Swiper from 'react-native-swiper';
 import Orientation from 'react-native-orientation';
 import {connect} from 'react-redux';
-import BackgroundTimer from 'react-native-background-timer';
 import Dashboard from './src/components/Dashboard';
 import Settings from './src/components/Settings';
 import BluetoothSerial from "react-native-bluetooth-serial";
 import {bluetoothConnected, bluetoothDisabled, bluetoothEnabled} from './src/actions/bluetooth';
 import {locationUpdated} from "./src/actions/location";
+import {statusUpdated} from "./src/actions/status";
 
 type Props = {};
 
 class App extends Component<Props> {
 
     componentWillMount() {
+        BluetoothSerial.withDelimiter('\r').then(() => {
+            Promise.all([
+                BluetoothSerial.isEnabled(),
+                BluetoothSerial.list()
+            ]).then((values) => {
+                const [isBluetoothEnabled, devices] = values;
 
-        BackgroundTimer.setInterval(() => {
-            navigator.geolocation.getCurrentPosition(
-                position => this.props.locationUpdated(position),
-                error => console.log(error),
-                {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
-            );
-        }, 1000);
+                if (isBluetoothEnabled === true) {
+                    this.props.bluetoothEnabled(devices);
+                    this.bluetoothConnect();
+                }
+            });
 
-        Promise.all([
-            BluetoothSerial.isEnabled(),
-            BluetoothSerial.list()
-        ]).then((values) => {
-            const [isBluetoothEnabled, devices] = values;
-
-            if (isBluetoothEnabled === true) {
-                this.props.bluetoothEnabled(devices);
-                this.bluetoothConnect();
-            }
+            BluetoothSerial.on('read', data => {
+                data = JSON.parse(data.data);
+                if (data.status === "OK") {
+                    this.props.statusUpdated(data);
+                }
+            });
         });
 
         BluetoothSerial.on('bluetoothEnabled', () => {
@@ -92,8 +92,8 @@ class App extends Component<Props> {
         return (
             <Swiper style={styles.wrapper} loop={false} showsButtons={false} showsPagination={false}>
                 <Dashboard/>
-                {/*<Map/>*/}
                 <Settings/>
+                {/*<Map/>*/}
             </Swiper>
         );
     }
@@ -125,6 +125,9 @@ const mapDispatchToProps = dispatch => {
         },
         locationUpdated: (locationData) => {
             dispatch(locationUpdated(locationData))
+        },
+        statusUpdated: (currentStatus) => {
+            dispatch(statusUpdated(currentStatus))
         },
     }
 };

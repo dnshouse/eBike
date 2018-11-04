@@ -14,55 +14,27 @@ class Dashboard extends Component {
         super(props);
 
         this.state = {
-            maxSpeed: 30,
-            batteryLevel: 0,
+            maxSpeed: 30
         };
 
         KeepAwake.activate();
-
-        // BackgroundTimer.setInterval(() => {
-        //     this.getData();
-        // }, 1000);
     }
-
-
-    // getData() {
-    //     if (this.props.isBluetoothConnected === true) {
-    //         BluetoothSerial.write("status")
-    //             .then((res) => {
-    //                 BluetoothSerial.readFromDevice().then((data) => {
-    //                     data = JSON.parse(data);
-    //                     if (data.status === "OK") {
-    //                         this.setState({
-    //                             avgSpeed: data.avgSpeed,
-    //                             tripDistance: data.tripDistance,
-    //                             odoMiles: data.odoMiles,
-    //                             speed: data.speed,
-    //                             batteryLevel: data.batteryLevel,
-    //                         });
-    //                         console.log(this.state);
-    //                     }
-    //                 }).catch((err) => console.log(err.message));
-    //             })
-    //             .catch((err) => console.log(err.message));
-    //     }
-    // }
 
     render() {
         return (
             <View style={styles.container}>
                 <View style={styles.sideBar}>
                     <LeftSidebar
-                        avgSpeed={this.props.avgSpeed}
                         tripDistance={this.props.tripDistance}
                         odoMiles={this.props.odoMiles}
+                        avgSpeed={this.props.avgSpeed}
                     />
                 </View>
                 <View style={styles.main}>
                     <SpeedGauge maxMph={this.state.maxSpeed} mph={this.props.currentSpeed}/>
                 </View>
                 <View style={styles.sideBar}>
-                    <RightSidebar batteryLevel={this.state.batteryLevel}/>
+                    <RightSidebar batteryLevel={this.props.batteryLevel}/>
                 </View>
             </View>
         );
@@ -86,14 +58,11 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     const {isBluetoothConnected} = state.bluetooth;
-    const {currentSpeed, avgSpeed, tripDistance, odoMiles} = state.location;
+    const {avgSpeed, batteryLevel, currentSpeed, odoMiles, tripDistance} = state.status;
 
     return {
         isBluetoothConnected,
-        currentSpeed,
-        avgSpeed,
-        tripDistance,
-        odoMiles,
+        avgSpeed, batteryLevel, currentSpeed, odoMiles, tripDistance
     }
 };
 
